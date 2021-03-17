@@ -1,8 +1,8 @@
 {
   "name": "strapi-plugin-email-designer",
-  "version": "0.2.4",
+  "version": "0.5",
   "description": "Strapi Email designer plugin.",
-  "homepage": "https://github.com/alexzaganelli/strapi-plugin-email-designer#readme",
+  "homepage": "https://github.com/Fretx-Service/strapi-plugin-email-designer/",
   "strapi": {
     "name": "email-designer",
     "icon": "envelope",
@@ -39,10 +39,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexzaganelli/strapi-plugin-email-designer.git"
+    "url": "git+https://github.com/Fretx-Service/strapi-plugin-email-designer.git"
   },
   "bugs": {
-    "url": "https://github.com/alexzaganelli/strapi-plugin-email-designer/issues"
+    "url": "https://github.com/Fretx-Service/strapi-plugin-email-designer/issues"
   },
   "keywords": [
     "strapi",
@@ -52,7 +52,6 @@
     "templates-design"
   ],
   "license": "MIT",
-  "funding": "https://paypal.me/AlexZaganelli",
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "cypress": "^6.5.0",

@@ -1,8 +1,8 @@
-'use strict';
-const _ = require('lodash');
+"use strict";
+const _ = require("lodash");
 
 /**
- * email-designer.js service
+ * email-designer-fix.js service
  *
  * @description: A set of functions similar to controller's actions to avoid code duplication.
  */
@@ -15,7 +15,7 @@ module.exports = {
    */
 
   count(params) {
-    return strapi.query('email-template', 'email-designer').count(params);
+    return strapi.query("email-template", "email-designer-fix").count(params);
   },
 
   /**
@@ -25,7 +25,7 @@ module.exports = {
    */
 
   countSearch(params) {
-    return strapi.query('email-template', 'email-designer').countSearch(params);
+    return strapi.query("email-template", "email-designer-fix").countSearch(params);
   },
 
   /**
@@ -33,7 +33,7 @@ module.exports = {
    * @return {Promise}
    */
   async add(values) {
-    return strapi.query('email-template', 'email-designer').create(values);
+    return strapi.query("email-template", "email-designer-fix").create(values);
   },
 
   /**
@@ -41,7 +41,7 @@ module.exports = {
    * @return {Promise}
    */
   async edit(params, values) {
-    return strapi.query('email-template', 'email-designer').update(params, values);
+    return strapi.query("email-template", "email-designer-fix").update(params, values);
   },
 
   /**
@@ -49,7 +49,7 @@ module.exports = {
    * @return {Promise}
    */
   fetch(params, populate) {
-    return strapi.query('email-template', 'email-designer').findOne(params, populate);
+    return strapi.query("email-template", "email-designer-fix").findOne(params, populate);
   },
 
   /**
@@ -57,7 +57,7 @@ module.exports = {
    * @return {Promise}
    */
   fetchAll(params, populate) {
-    return strapi.query('email-template', 'email-designer').find(params, populate);
+    return strapi.query("email-template", "email-designer-fix").find(params, populate);
   },
 
   /**
@@ -65,6 +65,6 @@ module.exports = {
    * @return {Promise}
    */
   async remove(params) {
-    return strapi.query('email-template', 'email-designer').delete(params);
+    return strapi.query("email-template", "email-designer-fix").delete(params);
   },
 };

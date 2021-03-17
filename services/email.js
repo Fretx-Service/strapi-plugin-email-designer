@@ -27,7 +27,7 @@ const sendTemplatedEmail = async (emailOptions = {}, emailTemplate = {}, data = 
     }
   });
 
-  const requiredAttributes = ['templateId', 'subject'];
+  const requiredAttributes = ['templateName', 'subject'];
   const attributes = [...requiredAttributes, 'text', 'html'];
   const missingAttributes = _.difference(requiredAttributes, Object.keys(emailTemplate));
   if (missingAttributes.length > 0) {

@@ -17,7 +17,7 @@ module.exports = {
     if (!templateId) throw new Error("No email template's id provided");
     let composedHtml, composedText;
     try {
-      const template = await strapi.query("email-template", "email-designer-fix").findOne({ id: templateId });
+      const template = await strapi.query("email-template", "email-designer").findOne({ id: templateId });
       composedHtml = _.template(template.bodyHtml)(data);
       composedText = _.template(template.bodyText)(data);
       
@@ -39,7 +39,7 @@ module.exports = {
     });
 
     try {
-      const { composedHtml = "", composedText = "" } = await strapi.plugins["email-designer-fix"].services.email.compose({
+      const { composedHtml = "", composedText = "" } = await strapi.plugins["email-designer"].services.email.compose({
         templateId,
         data,
       });

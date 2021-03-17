@@ -63,18 +63,18 @@ const sendTemplatedEmail = async (emailOptions = {}, emailTemplate = {}, data = 
  * Promise to retrieve a composed HTML email.
  * @return {Promise}
  */
-const compose = async ({ templateId, data }) => {
+const compose = async ({ templateName, data }) => {
   strapi.log.debug(`⚠️: `, `The 'compose' function is deprecated and may be removed or changed in the future.`);
 
-  if (!templateId) throw new Error("No email template's id provided");
+  if (!templateName) throw new Error("No email template's id provided");
   let composedHtml, composedText;
   try {
-    const template = await strapi.query('email-template', 'email-designer').findOne({ id: templateId });
+    const template = await strapi.query('email-template', 'email-designer').findOne({ name: templateName });
     composedHtml = _.template(decode(template.bodyHtml))({ ...data });
     composedText = _.template(decode(template.bodyText))({ ...data });
   } catch (error) {
     strapi.log.debug(error);
-    throw new Error('Email template not found with id: ' + templateId);
+    throw new Error('Email template not found with id: ' + templateName);
   }
 
   return { composedHtml, composedText };
@@ -85,7 +85,7 @@ const compose = async ({ templateId, data }) => {
  * Promise to send a composed HTML email.
  * @return {Promise}
  */
-const send = async ({ templateId, data, to, from, replyTo, subject }) => {
+const send = async ({ templateName, data, to, from, replyTo, subject }) => {
   strapi.log.debug(`⚠️: `, `The 'send' function is deprecated and may be removed or changed in the future.`);
 
   Object.entries({ to, from, replyTo }).forEach(([key, address]) => {
@@ -94,7 +94,7 @@ const send = async ({ templateId, data, to, from, replyTo, subject }) => {
 
   try {
     const { composedHtml = '', composedText = '' } = await strapi.plugins['email-designer'].services.email.compose({
-      templateId,
+      templateName,
       data,
     });
 

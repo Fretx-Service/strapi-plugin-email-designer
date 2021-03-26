@@ -33,19 +33,18 @@ const sendTemplatedEmail = async (emailOptions = {}, emailTemplate = {}, data = 
   if (missingAttributes.length > 0) {
     throw new Error(`Following attributes are missing from your email template : ${missingAttributes.join(', ')}`);
   }
-  let bodyHtml, bodyText;
   
+  let queryT = {};
   if(emailTemplate.templateId){
-    let { bodyHtml, bodyText } = await strapi
-    .query('email-template', 'email-designer')
-    .findOne({ id: emailTemplate.templateId });
+    queryT = { id: emailTemplate.templateId };
+  }else if( emailTemplate.templateName){
+    queryT = { name: emailTemplate.templateName };
   }
-  if(emailTemplate.templateName){
-     let { bodyHtml, bodyText } = await strapi
-    .query('email-template', 'email-designer')
-    .findOne({ name: emailTemplate.templateName });
-  }
-     
+       
+  let { bodyHtml, bodyText } = await strapi
+  .query('email-template', 'email-designer')
+  .findOne(queryT);
+  
   if ((!bodyText || !bodyText.length) && bodyHtml && bodyHtml.length)
     bodyText = htmlToText(bodyHtml, { wordwrap: 130, trimEmptyLines: true });
 

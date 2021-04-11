@@ -92,7 +92,7 @@ const compose = async ({ templateName, data }) => {
  * Promise to send a composed HTML email.
  * @return {Promise}
  */
-const send = async ({ templateName, data, to, from, replyTo, subject }) => {
+const send = async ({ templateName, data, to, from, replyTo, bcc, subject }) => {
   strapi.log.debug(`⚠️: `, `The 'send' function is deprecated and may be removed or changed in the future.`);
 
   Object.entries({ to, from, replyTo }).forEach(([key, address]) => {
@@ -110,6 +110,7 @@ const send = async ({ templateName, data, to, from, replyTo, subject }) => {
       from,
       replyTo,
       subject,
+      bcc,
       html: composedHtml,
       text: composedText,
     });

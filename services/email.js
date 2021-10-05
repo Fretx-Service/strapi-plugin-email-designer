@@ -42,9 +42,15 @@ const sendTemplatedEmail = async (emailOptions = {}, emailTemplate = {}, data = 
     queryT = { name: emailTemplate.templateName };
   }
 
-  let { bodyHtml, bodyText } = await strapi
+  let { bodyHtml, bodyText, externalId, profile } = await strapi
   .query('email-template', 'email-designer')
   .findOne(queryT);
+
+  externalId = _.parseInt(externalId);
+  const emailSettings = (_.isEmpty(profile))
+    ? strapi.config.get('plugins.templatedEmail.default','')
+    : strapi.config.get(`plugins.templatedEmail.${profile}`,'');
+  if(emailSettings.provider !== 'mailjet') throw new Error(`Provider "${emailSettings.provider}" not supported!`);
 
   if ((!bodyText || !bodyText.length) && bodyHtml && bodyHtml.length)
     bodyText = htmlToText(bodyHtml, { wordwrap: 130, trimEmptyLines: true });
@@ -63,7 +69,57 @@ const sendTemplatedEmail = async (emailOptions = {}, emailTemplate = {}, data = 
     {}
   );
 
-  return strapi.plugins.email.provider.send({ ...emailOptions, ...templatedAttributes });
+  // in case of externalId, uses it, else proccess local template
+  let message;
+  if(externalId > 0) {
+    message = {
+      "From": {
+        "Email": emailSettings.settings.defaultFrom,
+        "Name": emailSettings.settings.defaultFromName
+      },
+      "To": [
+        {
+          "Email": emailOptions.to,
+          "Name": ""
+        }
+      ],
+      "Subject": emailTemplate.subject,
+      "TemplateID": externalId,
+      "TemplateLanguage": true,
+      "Variables": {
+        "data" : { ...data }
+      }
+    }
+  } else {
+    message = {
+      "From": {
+        "Email": emailSettings.settings.defaultFrom,
+        "Name": emailSettings.settings.defaultFromName
+      },
+      "To": [
+        {
+          "Email": emailOptions.to,
+          "Name": ""
+        }
+      ],
+      "Subject": emailTemplate.subject,
+      "TextPart": templatedAttributes['text'],
+      "HTMLPart": templatedAttributes['html']
+    };
+  }
+  const request = mailjet
+    .connect(emailSettings.providerOptions.publicApiKey , emailSettings.providerOptions.secretApiKey)
+    .post("send", {'version': 'v3.1'})
+    .request({ "Messages": [message] });
+  request
+    .then((result) => {
+      return result.body;
+    })
+    .catch((err) => {
+      console.log(err.statusCode);
+      return err.statusCode;
+    });
+
 };
 
 /**
